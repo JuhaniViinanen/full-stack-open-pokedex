@@ -48,7 +48,7 @@ jobs:
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           title: Pokedex failed to build
-          description: ${{ ${{ join(github.event.commits.*.message, \n) }} }}
+          description: ${{ join(github.event.commits.*.message, \n) }}
 
   tag_release:
     needs: [simple_deployment_pipeline]
