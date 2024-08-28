@@ -15,6 +15,7 @@ app.get('/health', (_req, res) => {
 })
 
 app.listen(PORT, () => {
+  throw new Error("broken on purpose")
   // eslint-disable-next-line no-console
   console.log(`server started on port ${PORT}`)
 })
