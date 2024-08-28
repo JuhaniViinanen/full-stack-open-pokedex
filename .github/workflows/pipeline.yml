@@ -35,11 +35,20 @@ jobs:
         if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message),'#skip') }}
         run: curl https://api.render.com/deploy/srv-${{secrets.RENDER_SERVICE_ID}}?key=${{secrets.RENDER_API_KEY}}
       - name: New version notification
-        uses: bythope/discord-webhook-messages@v1.1.0
-        if: ${{ github.event_name == 'push' }}
+        uses: sarisia/actions-status-discord@v1
+        if: ${{ github.event_name == 'push' && success() }}
         with:
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          handler: 'push'
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          title: A new version of Pokedex deployed
+          description: ${{ github.event.head_commit.message }}
+          url: https://full-stack-open-pokedex-1i6o.onrender.com/
+      - name: Build error notification
+        uses: sarisia/actions-status-discord@v1
+        if: ${{ github.event_name == 'push' && failure() }}
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          title: Pokedex failed to build
+          description: ${{ github.event.head_commit.message }}
 
   tag_release:
     needs: [simple_deployment_pipeline]
