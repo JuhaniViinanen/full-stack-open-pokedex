@@ -36,7 +36,7 @@ jobs:
         run: curl https://api.render.com/deploy/srv-${{secrets.RENDER_SERVICE_ID}}?key=${{secrets.RENDER_API_KEY}}
       - name: New version notification
         uses: sarisia/actions-status-discord@v1
-        if: ${{ github.event_name == 'push' && success() }}
+        if: ${{ github.event_name == 'push' && success() && !contains(join(github.event.commits.*.message),'#skip') }}
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           title: A new version of Pokedex deployed
@@ -44,7 +44,7 @@ jobs:
           url: https://full-stack-open-pokedex-1i6o.onrender.com/
       - name: Build error notification
         uses: sarisia/actions-status-discord@v1
-        if: ${{ github.event_name == 'push' && failure() }}
+        if: ${{ github.event_name == 'push' && failure() && !contains(join(github.event.commits.*.message),'#skip') }}
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           title: Pokedex failed to build

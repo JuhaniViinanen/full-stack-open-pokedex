@@ -17,8 +17,11 @@ jobs:
           retry-delay: 5s
       - name: send failure notification
         if: ${{ failure() }}
-        uses: rguillaume/discord-action-embed@v1.0.4
+        uses: sarisia/actions-status-discord@v1
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          message: https://full-stack-open-pokedex-1i6o.onrender.com/health
-          embed: '{ "color": FF0000, "title": "Pokedex health check failed" }'
+          nodetail: true
+          title: "Pokedex health check failed"
+          color: 0xFF0000
+          description: https://full-stack-open-pokedex-1i6o.onrender.com/health
+          username: "Periodic health check"
